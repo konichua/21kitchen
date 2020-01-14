@@ -5,19 +5,20 @@ import requests
 #kitchen21_bot 1006074917:AAEuQNPot-SYTvBRFsp0DQ0GeUZc1a4QXJI
 
 telebot.apihelper.proxy = {'https': 'socks5h://geek:socks@t.geekclass.ru:7777'}
-
 bot = telebot.TeleBot('1006074917:AAEuQNPot-SYTvBRFsp0DQ0GeUZc1a4QXJI')
 
-flag = 0
+flag = 0    # for confirmation
+order = {}  # order of our client
+
 bever = {
     '101':'water',
     '102':'tea',
     '103':'coffee',
 }
 salad = {
-    '104':'salad4',
-    '105':'salad5',
-    '106':'salad6',
+    '104':'Cherepashka',
+    '105':'RussianSalad',
+    '106':'Tsezar',
 }
 main = {
     '107':'pasta',
@@ -34,9 +35,9 @@ allmenu = {
     '101':'water',
     '102':'tea',
     '103':'coffee',
-    '104':'salad4',
-    '105':'salad5',
-    '106':'salad6',
+    '104':'Cherepashka',
+    '105':'RussianSalad',
+    '106':'Tsezar',
     '107':'pasta',
     '108':'soup',
     '109':'vegetables',
@@ -45,9 +46,9 @@ allmenu = {
 }
 
 short_description = {
-    '101':'че смотришь, обычная вода',
-    '102':'пакетик чая',
-    '103':'растворимый и не очень растворимый кофе',
+    '101':'вода',
+    '102':'чай',
+    '103':'кофе',
     '104':'черепашка',
     '105':'оливье',
     '106':'цезарь',
@@ -59,20 +60,18 @@ short_description = {
 }
 
 long_description = {
-    '101':'вода вода вода вода вода',
-    '102':'чай как чай',
-    '103':'растворимый и не очень растворимый кофе можно добавить сахар/сироп по вкусу',
-    '104':'черепашка ингредиенты: грецкий орех, яйцо, яблоко, майонез',
-    '105':'оливье ингредиенты: докторская колбаса, картофель, морковь, майонез',
-    '106':'цезарь ингредиенты: курица, листья салата, греночки, майонез ',
-    '107':'котлетка с макарошкой - иногда можете получить пюрешку в качестве сюрприза',
-    '108':'крем-суп - не забудь взять ко мне гренки',
-    '109':'тушеные овощи - на гриле - самая полезная еда, которую ты видел сегодня',
-    '110':'греночки как греночки',
-    '111':'хлебушек свежий',
+    '101':'Вода негазированная',
+    '102':'Чай как чай',
+    '103':'Растворимый и не очень растворимый кофе можно добавить сахар/сироп по вкусу',
+    '104':'Черепашка ингредиенты: грецкий орех, яйцо, яблоко, майонез',
+    '105':'Оливье ингредиенты: докторская колбаса, картофель, морковь, майонез',
+    '106':'Цезарь ингредиенты: курица, листья салата, греночки, майонез ',
+    '107':'Котлетка с макарошкой - иногда можете получить пюрешку в качестве сюрприза',
+    '108':'Крем-суп - не забудь взять ко мне гренки',
+    '109':'Тушеные овощи - на гриле - самая полезная еда, которую ты видел сегодня',
+    '110':'Греночки как греночки',
+    '111':'Хлебушек свежий',
 }
-
-order = {} #order of our client
 
 @bot.message_handler(commands=['start', 'help'])
 def help(message):
@@ -86,12 +85,10 @@ def fullmenu(message):
     user_id = message.chat.id
     items = 'Choose:\n\n'
     for key, value in allmenu.items():
-        #items += key
+        items += short_description.get(key, 0) + "\n"
         items += ' /' + value + "_description" + "\n"
         items += ' /' + value + "_add_to_cart" + "\n"
-        items += short_description.get(key, 0)
         items += '\n'
-    items += '\nType number to add to cart.'
     bot.send_message(user_id, items)
 
 @bot.message_handler(commands=['beverages'])
@@ -99,12 +96,10 @@ def beverages(message):
     user_id = message.chat.id
     items = 'Choose:\n\n'
     for key, value in bever.items():
-      #  items += key
+        items += short_description.get(key, 0) + "\n"
         items += ' /' + value + "_description" + "\n"
         items += ' /' + value + "_add_to_cart" + "\n"
-        items += short_description.get(key, 0)
         items += '\n'
-    items += '\nType number to add to cart.'
     bot.send_message(user_id, items)
 
 @bot.message_handler(commands=['salads'])
@@ -112,12 +107,10 @@ def salads(message):
     user_id = message.chat.id
     items = 'Choose:\n\n'
     for key, value in salad.items():
-    #    items += key
+        items += short_description.get(key, 0) + "\n"
         items += ' /' + value + "_description" + "\n"
         items += ' /' + value + "_add_to_cart" + "\n"
-        items += short_description.get(key, 0)
         items += '\n'
-    items += '\nType number to add to cart.'
     bot.send_message(user_id, items)
 
 @bot.message_handler(commands=['snacks'])
@@ -125,12 +118,10 @@ def snacks(message):
     user_id = message.chat.id
     items = 'Choose:\n\n'
     for key, value in snack.items():
-    #    items += key
+        items += short_description.get(key, 0) + "\n"
         items += ' /' + value + "_description" + "\n"
         items += ' /' + value + "_add_to_cart" + "\n"
-        items += short_description.get(key, 0)
         items += '\n'
-    items += '\nType number to add to cart.'
     bot.send_message(user_id, items)
 
 @bot.message_handler(commands=['main'])
@@ -138,12 +129,10 @@ def maining(message):
     user_id = message.chat.id
     items = 'Choose:\n\n'
     for key, value in main.items():
-     #   items += key
+        items += short_description.get(key, 0) + "\n"
         items += ' /' + value + "_description" + "\n"
         items += ' /' + value + "_add_to_cart" + "\n"
-        items += short_description.get(key, 0)
         items += '\n'
-    items += '\nType number to add to cart.'
     bot.send_message(user_id, items)
 
 @bot.message_handler(commands=['cart'])
@@ -152,7 +141,7 @@ def show_cart(message):
     if user_id not in order:
         bot.send_message(user_id, "Your cart is empty.\n/help")
     else:
-        bot.send_message(user_id, "Your cart:" + '\n\n' + order[user_id] + '\n'
+        bot.send_message(user_id, "Your cart:" + '\n\n' + order[user_id]
                      + "\nDelete any item:" + "\n/delete"
                      + "\nSee more:" + "\n/fullmenu"
                      + "\nConfirm order:" + "\n/confirm")
@@ -160,25 +149,22 @@ def show_cart(message):
 @bot.message_handler(commands=['delete'])
 def delete_item(message):
     user_id = message.chat.id
-    if user_id not in order:
+    if user_id not in order or order[user_id] == "":
         bot.send_message(user_id, "Sorry, you can't delete. \nYour cart is empty.\n/help")
     else:
-        count = 1
-        bot.send_message(user_id, "Which item do u want to delete?\n")# + order[user_id])
-        list = ''
+        list = "Which item do u want to delete?\n/"
         for i in order[user_id]:
             if (i == '\n'):
-                list += ' - ' + count.__str__() + i
-                count += 1
+                list += "_delete" + i + "/"
             else:
                 list += i
-        list += ' - ' + count.__str__()
+       # list += "_delete"
         bot.send_message(user_id, list)
 
 @bot.message_handler(commands=['confirm'])
 def confirm(message):
     user_id = message.chat.id
-    if user_id not in order:
+    if user_id not in order or order[user_id] == "":
         bot.send_message(user_id, "Sorry, you can't confirm.\nYour cart is empty.\n/help")
     else:
         global flag
@@ -222,9 +208,9 @@ def add_to_cart(message):
     for i in allmenu.values():
         if i == thing:
             if user_id not in order:
-                order[user_id] = thing
+                order[user_id] = thing + "\n"
             else:
-                order[user_id] += '\n' + thing
+                order[user_id] += thing + "\n"
             bot.send_message(user_id, thing + " is added to cart successfully.\n" + 'Type /cart to see your order.')
 
 @bot.message_handler(func=lambda message: message.text.split('_')[-1] == 'description')
@@ -238,6 +224,24 @@ def description(message):
             bot.send_message(user_id, thing + ":\n" + long_description.get(key))
             photo = open(f'{thing}.jpg', 'rb')
             bot.send_photo(user_id, photo)
+
+
+@bot.message_handler(func=lambda message: message.text.split('_')[-1] == 'delete')
+def description(message):
+    user_id = message.chat.id
+    list = message.text.split('_')
+    thing = list[0]
+    thing = thing[1:] + "\n"    # товар который нужно удалить
+    if user_id in order and thing in order[user_id] != -1:    # ищем подстроку в строке - есть ли товар который хотят удалить в корзине
+        str = order[user_id]  # строка с нашими товарами через бекслешэн
+        start = str.find(thing)
+        end = start + len(thing)
+        str = str[:start] + str[end:]
+        order[user_id] = str
+        bot.send_message(user_id, "Delete successful")
+        show_cart(message)
+    else:
+        bot.send_message(user_id, "Sorry, you can't delete " + thing + "Check your /cart")
 
 @bot.message_handler(content_types=['text'])
 def remember(message):
