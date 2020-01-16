@@ -306,4 +306,4 @@ def remember(message):
         bot.send_message(user_id, "Type number to add an item to cart \nor /help")
 """
 
-bot.polling(none_stop=True, timeout=60)
+bot.polling(none_stop=True)
